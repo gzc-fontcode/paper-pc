@@ -1,0 +1,17 @@
+
+/* src/assets/theme.css */
+
+/* 基础颜色设置 */
+:root {
+    --el-color-primary: #59b829; /* 语雀的绿色主题色 */
+    --el-menu-hover-bg-color: #eff0f0; /* 语雀菜单悬停背景色，浅绿色 */
+    --el-color-success: #52c41a; /* 成功状态颜色 */
+    --el-color-warning: #faad14; /* 警告颜色 */
+    --el-color-danger: #f5222d; /* 错误颜色 */
+    --el-link-color: #52c41a; /* 链接颜色 */
+    --el-link-hover-color: #73d13d; /* 链接悬停颜色，稍深的绿色 */
+    --el-button-primary-bg-color: #52c41a; /* 按钮主色 */
+    --el-color-primary-light-3: #73d13d; /* 按钮主色的浅色 */
+    --el-color-primary-light-5: #b2ead2; /* 按钮主色的稍浅的浅色 */
+    --el-color-primary-light-9: #eff0f0; /* 按钮主色的更浅的浅色 */
+}

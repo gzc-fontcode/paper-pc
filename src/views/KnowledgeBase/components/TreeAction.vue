@@ -7,7 +7,7 @@
             popper-class="custom-popover"
             :show-arrow="false"
         >
-            <el-button type="danger" @click.stop="showDeleteDialog(null)" class="popover-btn delete"
+            <el-button type="danger" @click.stop="showDeleteDialog(props.data)" class="popover-btn delete"
                 ><el-icon><Delete /></el-icon>删除</el-button
             >
             <template #reference>
@@ -41,7 +41,7 @@ import { ElButton, ElPopover, ElMessage, ElDialog } from 'element-plus'
 const props = defineProps({
     data: {
         type: Object,
-        required: true,
+        required: false,
     },
 })
 

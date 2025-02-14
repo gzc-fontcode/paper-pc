@@ -8,6 +8,8 @@ import TeamPaper from '@/views/TeamPaper.vue'
 import NotFound from '@/views/NotFound.vue'
 import KnowledgeBase from '@/views/KnowledgeBase/KnowledgeBase.vue'
 import KnowledgeBaseContent from '@/views/KnowledgeBase/views/KnowledgeBaseContent.vue'
+// 导入新的文档页面组件（假设为 DocumentPage.vue）
+import DocumentPage from '@/views/KnowledgeBase/views/DocumentPage.vue'
 
 const routes = [
     {
@@ -53,6 +55,12 @@ const routes = [
                 path: '', // 默认子路由
                 name: 'KnowledgeBaseContent',
                 component: KnowledgeBaseContent,
+            },
+            // 新增文档页面路由
+            {
+                path: 'document/:documentId',
+                name: 'DocumentPage',
+                component: DocumentPage,
             },
             // 可以在这里添加更多子路由
         ],

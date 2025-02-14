@@ -19,6 +19,7 @@
                 :props="defaultProps"
                 node-key="id"
                 :default-expanded-keys="[1]"
+                @node-click="props.handleNodeClick"
             >
                 <template #default="{ node, data }">
                     <span class="custom-tree-node">
@@ -33,42 +34,46 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { ElTree } from 'element-plus';
+import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ElTree } from 'element-plus'
 const props = defineProps({
     treeData: {
         type: Object,
-        required: true
+        required: true,
     },
     defaultProps: {
         type: Object,
-        required: true
+        required: true,
+    },
+    handleNodeClick: {
+        type: Function,
+        required: true, 
     }
-});
-const route = useRoute();
-const knowledgeBaseId = ref(route.params.id);
-const loading = ref(false);
+})
+const route = useRoute()
+const knowledgeBaseId = ref(route.params.id)
+const loading = ref(false)
 
 // 封装加载数据的函数，可添加重试机制
 const fetchKnowledgeBaseData = async (id) => {
     try {
         // 模拟异步请求
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log(`加载知识库 ID: ${id}`);
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        console.log(`加载知识库 ID: ${id}`)
         // 这里可以更新 treeData
     } catch (error) {
-        console.error('加载知识库数据失败:', error);
+        console.error('加载知识库数据失败:', error)
         // 可以添加重试逻辑
     }
-};
+}
 
 // 在组件挂载时加载知识库数据
 onMounted(async () => {
-    loading.value = true;
-    await fetchKnowledgeBaseData(knowledgeBaseId.value);
-    loading.value = false;
-});
+    loading.value = true
+    await fetchKnowledgeBaseData(knowledgeBaseId.value)
+    loading.value = false
+})
 </script>
 
 <style lang="scss" scoped>
@@ -80,9 +85,9 @@ onMounted(async () => {
     background-color: hsla(0, 0%, 100%, 0.9);
     padding: 20px;
     border-radius: 10px;
-  .header {
+    .header {
         margin-bottom: 20px;
-      .title {
+        .title {
             font-size: 24px;
             font-weight: bold;
             display: flex;
@@ -90,7 +95,7 @@ onMounted(async () => {
             gap: 8px;
             margin-bottom: 30px;
         }
-      .meta {
+        .meta {
             display: flex;
             align-items: center;
             gap: 20px;
@@ -98,48 +103,47 @@ onMounted(async () => {
             color: #888;
             b {
                 font-weight: bold;
-                font-size: 20px;
-                color: #333;
             }
         }
     }
-  .content {
-      .el-tree {
-            :deep(.el-tree-node__content) {
-                height: 36px;
+}
+
+.content {
+    .el-tree {
+        :deep(.el-tree-node__content) {
+            height: 36px;
+        }
+        .custom-tree-node {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            .el-icon {
+                color: #999;
             }
-          .custom-tree-node {
-                display: flex;
-                width: 100%;
-                align-items: center;
-                gap: 8px;
-                position: relative;
-              .el-icon {
-                    color: #999;
-                }
-              .node-label {
-                    flex: 1;
-                }
-              .date {
-                    width: 115px;
-                    color: #999;
-                    margin-left: 8px;
-                }
-                &::after {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    left: calc(10px + 8px + 1em); /* 根据图标和间隔调整起始位置 */
-                    right: 120px; /* 根据日期宽度调整结束位置 */
-                    border-top: 1px dashed #ccc;
-                }
+            .node-label {
+                flex: 1;
+            }
+            .date {
+                width: 115px;
+                color: #999;
+                margin-left: 8px;
+            }
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: calc(10px + 8px + 1em); /* 根据图标和间隔调整起始位置 */
+                right: 120px; /* 根据日期宽度调整结束位置 */
+                border-top: 1px dashed #ccc;
             }
         }
     }
-  .loading {
-        text-align: center;
-        padding: 20px;
-        color: #888;
-    }
+}
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #888;
 }
 </style>

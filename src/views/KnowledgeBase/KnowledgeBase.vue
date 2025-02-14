@@ -1,16 +1,21 @@
 <template>
     <div class="root">
         <!-- 侧边栏 -->
-        <Sidebar :treeData="treeData" :defaultProps="defaultProps" :addDocument="addDocument"/>
+        <Sidebar :knowledgeBaseId="knowledgeBaseId" :treeData="treeData" :defaultProps="defaultProps" :addDocument="addDocument" :handleNodeClick="handleNodeClick"/>
         <!-- 路由视图 -->
-        <router-view :treeData="treeData" :defaultProps="defaultProps"/>
+        <router-view :treeData="treeData" :defaultProps="defaultProps" :handleNodeClick="handleNodeClick"/>
     </div>
 </template>
 
 <script setup>
 import Sidebar from './components/Sidebar.vue';
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
+
+const route = useRoute();
+const router = useRouter();
+const knowledgeBaseId = ref(route.params.id);
 
 // 定义树结构数据
 const treeData = ref([
@@ -107,6 +112,17 @@ const addDocument = () => {
     treeData.value.push(newDocument);
     ElMessage.success('新增文档成功');
 };
+
+// 处理树节点点击事件
+const handleNodeClick = (data) => {
+    router.push({
+        name: 'DocumentPage',
+        params: {
+            id: knowledgeBaseId.value,
+            documentId: data.id,
+        },
+    })
+}
 
 </script>
 

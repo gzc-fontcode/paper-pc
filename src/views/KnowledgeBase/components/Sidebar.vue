@@ -143,7 +143,7 @@ const deleteDocument = (node) => {
     width: 240px;
     background-color: #ffffff;
     padding: 10px;
-    margin-right: 20px;
+    // margin-right: 20px;
     .title {
         display: flex;
         align-items: center;

@@ -49,7 +49,7 @@ const props = defineProps({
     height: 52px;
     width: auto;
     border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.04);
     transform: translateY(0);
     transition: transform 0.2s ease 0.2s, left 0.2s cubic-bezier(0.1, 0, 0, 1) 0s;
     will-change: transform, left;

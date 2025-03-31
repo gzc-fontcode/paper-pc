@@ -5,6 +5,10 @@
             <img src="@/assets/icon/book-solid.svg" alt="" />
             <span>知识库{{ knowledgeBaseId }}</span>
         </h2>
+        <!-- 分割线 -->
+        <div class="split">
+        </div>
+        <!-- 目录 -->
         <div
             class="catalogue"
             @click="
@@ -147,7 +151,7 @@ const deleteDocument = (node) => {
     .title {
         display: flex;
         align-items: center;
-        margin: 0 0 20px;
+        margin: 0 0 17px;
         img {
             width: 24px;
             height: 24px;
@@ -157,6 +161,13 @@ const deleteDocument = (node) => {
             font-size: 20px;
             font-weight: bold;
         }
+    }
+    .split {
+        width: calc(100% + 20px);
+        height: 1px;
+        background-color: #d9d9d9;
+        margin: 10px 0;
+        transform: translateX(-10px);
     }
     :deep(.catalogue) {
         @include hoverable-item;

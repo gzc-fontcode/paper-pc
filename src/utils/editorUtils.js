@@ -97,38 +97,88 @@ export const toggleSubscript = (editor) => {
     }
 };
 
-// 获取选中部分文本的属性
-export const getSelectedTextAttributes = (editor) => {
+// 设置标题
+export const setHeading = (editor, level) => {
     if (editor) {
-        const { state } = editor;
-        const { selection } = state;
-        const { from, to } = selection;
-        console.log(selection, 'selection');
-        
-        if (from === to) {
-            return null;
-        }
-        
-        const startPos = state.doc.resolve(from);
-        const endPos = state.doc.resolve(to);
-        
-        const marks = [];
-        let fontSize = null;
-        startPos.marks().forEach((mark) => {
-            marks.push({ type: mark.type.name, attrs: mark.attrs });
-            if (mark.type.name === 'fontSize') {
-                fontSize = mark.attrs.size;
-            }
-        });
-        const node = startPos.parent;
-        const nodeType = node.type.name;
-        const nodeAttrs = node.attrs;
-        return {
-            marks,
-            nodeType,
-            nodeAttrs,
-            fontSize
-        };
+        editor.chain().toggleHeading({ level }).focus().run();
     }
-    return null;
 };
+
+// 判断当前节点是正文还是几级标题
+export const getNodeInfo = (editor) => {
+    if (!editor) {
+        return '未知类型';
+    }
+
+    const { state } = editor;
+    const { selection } = state;
+    const { $from, $to } = selection;
+
+    let hasParagraph = false;
+    let hasHeading = false;
+    const headingLevels = new Set();
+
+    for (let pos = $from.pos-1; pos <= $to.pos; pos++) {
+        let node = state.doc.nodeAt(pos);
+        while (node && node.type.name === 'text') {
+            node = state.doc.resolve(pos).parent;
+        }
+
+        if (node) {
+            if (node.type.name === 'heading') {
+                headingLevels.add(node.attrs.level);
+            } else if (node.type.name === 'paragraph') {
+                hasParagraph = true;
+            }
+        }
+    }
+    const levelsArr = Array.from(headingLevels).sort((a, b) => a - b);
+    if (hasParagraph && levelsArr.length > 0) {
+        return '';
+    } else if (hasParagraph) {
+        return '正文';
+    } else if (levelsArr.length === 1) {
+        const levels = levelsArr.join(', ');
+        return `标题 ${levels}`;
+    }
+
+    return '';
+};       
+
+// // 获取选中文本的font-size属性值
+// export function getSelectedTextFontSize() {
+//     const selection = window.getSelection();
+//     if (selection && selection.rangeCount > 0) {
+//       const range = selection.getRangeAt(0);
+//       const startContainer = range.startContainer;
+//       let element;
+//       if (startContainer.nodeType === Node.TEXT_NODE) {
+//         element = startContainer.parentElement;
+//       } else {
+//         element = startContainer;
+//       }
+
+//       // 递归查找font-size属性值
+//       function getFontSizeRecursive(el) {
+//         if (!el) return '';
+//         const computedStyle = window.getComputedStyle(el);
+//         const fontSize = computedStyle.fontSize;
+//         if (fontSize && fontSize!== 'medium') {
+//           return fontSize;
+//         }
+//         return getFontSizeRecursive(el.parentElement);
+//       }
+
+//       if (element) {
+//         return getFontSizeRecursive(element);
+//       }
+//     }
+//     return null;
+// }
+
+// // 设置字体大小
+// export const setFontSize = (editor, fontSize) => {
+//     if (editor) {
+//         editor.chain().focus().setMark('textStyle', { fontSize }).run();
+//     }
+// };

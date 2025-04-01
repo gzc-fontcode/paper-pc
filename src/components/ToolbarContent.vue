@@ -21,6 +21,37 @@
                 <i class="iconfont icon-redo"></i>
             </div>
         </el-tooltip>
+        <el-dropdown trigger="click">
+            <el-button type="" class="toolbar-btn node-level">
+                <div>
+                    <span>{{ editorInfo.nodeInfo.nodeType }}</span>
+                    <el-icon class="el-icon--right"><arrow-down /></el-icon>
+                </div>
+            </el-button>
+            <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item @click="setHeading(editor, i)" v-for="i in 6"
+                        >标题 {{ i }}</el-dropdown-item
+                    >
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+        <!-- 字体大小，找不到修改办法 -->
+        <!-- <el-dropdown trigger="click">
+            <el-button type="primary">
+                {{ editorInfo.textAttributes.fontSize
+                }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+            </el-button>
+            <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item @click="setFontSize(editor, '12px')">12px</el-dropdown-item>
+                    <el-dropdown-item @click="setFontSize(editor, '14px')">14px</el-dropdown-item>
+                    <el-dropdown-item @click="setFontSize(editor, '16px')">16px</el-dropdown-item>
+                    <el-dropdown-item @click="setFontSize(editor, '18px')">18px</el-dropdown-item>
+                    <el-dropdown-item @click="setFontSize(editor, '20px')">20px</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown> -->
         <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
             <template #content>
                 粗 体<br />
@@ -140,10 +171,13 @@ import {
     insertHorizontalRule,
     toggleSuperscript,
     toggleSubscript,
+    setHeading, // 引入设置标题的函数
 } from '@/utils/editorUtils'
 
 // 注入编辑器实例
 const editor = inject('editor')
+// 注入编辑器的一些信息
+const editorInfo = inject('editorInfo')
 
 // 存储当前节点类型
 const currentNodeType = ref('')
@@ -175,6 +209,27 @@ const currentNodeType = ref('')
         }
         .plus-action {
             color: #00b96b;
+        }
+    }
+    .node-level {
+        width: 75px;
+        font-size: 14px;
+        color: #666;
+        div {
+            display: flex;
+            width: 60px;
+            span {
+                flex: 1;
+            }
+            .el-icon--right {
+                width: 25px;
+                flex: 0;
+                font-size: 12px;
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
         }
     }
 }

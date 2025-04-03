@@ -15,7 +15,7 @@
 <script setup>
 import { provide, ref, watch, onUnmounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { Editor } from '@tiptap/vue-3'
+import { Editor, VueNodeViewRenderer } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
@@ -34,10 +34,26 @@ import Table from '@tiptap/extension-table'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
+import CodeBlock from '@tiptap/extension-code-block'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { all, createLowlight } from 'lowlight'
+import css from 'highlight.js/lib/languages/css'
+import js from 'highlight.js/lib/languages/javascript'
+import ts from 'highlight.js/lib/languages/typescript'
+import html from 'highlight.js/lib/languages/xml'
 import DocumentHeader from '../../../components/DocumentHeader.vue'
 import DocumentEditor from '@/components/DocumentEditor.vue'
+import CodeBlockComponent from '@/components/CodeBlockComponent.vue'
 import { debounce } from '@/utils/utils'
 import { getNodeInfo } from '@/utils/editorUtils'
+
+const lowlight = createLowlight(all)
+
+// you can also register languages
+lowlight.register('html', html)
+lowlight.register('css', css)
+lowlight.register('js', js)
+lowlight.register('ts', ts)
 
 const route = useRoute()
 
@@ -165,6 +181,13 @@ const editor = new Editor({
         TableHeader,
         TableRow,
         TableCell,
+        CodeBlockLowlight
+          .extend({
+            addNodeView() {
+              return VueNodeViewRenderer(CodeBlockComponent)
+            },
+          })
+          .configure({ lowlight }),
     ],
     // 初始内容
     content: document.value.content,

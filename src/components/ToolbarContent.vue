@@ -160,6 +160,15 @@
                 <i class="iconfont icon-link"></i>
             </div>
         </el-tooltip>
+        <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
+            <template #content>
+                插入代码块<br />
+                Ctrl + Shift + C
+            </template>
+            <div class="toolbar-btn" @click="insertCodeBlock(editor)">
+                <i class="iconfont icon-code-block"></i>
+            </div>
+        </el-tooltip>
     </div>
 </template>
 
@@ -182,6 +191,7 @@ import {
     toggleSubscript,
     setHeading, // 引入设置标题的函数
     insertTable, // 引入插入表格的函数
+    insertCodeBlock, // 引入插入代码块的函数
 } from '@/utils/editorUtils'
 
 // 注入编辑器实例

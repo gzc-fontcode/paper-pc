@@ -182,6 +182,20 @@ export const deleteColumn = (editor) => {
     }
 };
 
+// 插入代码块的函数
+export const insertCodeBlock = (editor) => {
+    if (editor) {
+        editor.chain().focus().toggleCodeBlock().run()
+    }
+}
+
+// 删除代码块
+export const deleteCodeBlock = (editor) => {
+    if (editor) {
+        editor.chain().focus().deleteNode('codeBlock').run();
+    }
+};
+
 // // 获取选中文本的font-size属性值
 // export function getSelectedTextFontSize() {
 //     const selection = window.getSelection();

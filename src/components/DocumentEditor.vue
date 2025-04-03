@@ -3,6 +3,7 @@
         <ToolbarContent />
         <div class="editor-content">
             <editor-content :editor="editor" @contextmenu="handleTableContextMenu" />
+            <!-- 表格编辑的弹出框 -->
             <el-popover
                 v-model:visible="popoverVisible"
                 trigger="manual"
@@ -137,6 +138,74 @@ const editor = inject('editor')
 
                 tr:hover {
                     background-color: #eaeaea;
+                }
+            }
+            pre {
+                background: #272c35;
+                border-radius: 0.5rem;
+                color: #ffffff;
+                font-family: 'JetBrainsMono', monospace;
+                margin: 1.5rem 0;
+                padding: 2.75rem 1rem;
+
+                code {
+                    background: none;
+                    color: inherit;
+                    font-size: 0.8rem;
+                    padding: 0;
+                }
+
+                /* Code styling */
+                .hljs-comment,
+                .hljs-quote {
+                    color: #616161;
+                }
+
+                .hljs-variable,
+                .hljs-template-variable,
+                .hljs-attribute,
+                .hljs-tag,
+                .hljs-name,
+                .hljs-regexp,
+                .hljs-link,
+                .hljs-name,
+                .hljs-selector-id,
+                .hljs-selector-class {
+                    color: #f98181;
+                }
+
+                .hljs-number,
+                .hljs-meta,
+                .hljs-built_in,
+                .hljs-builtin-name,
+                .hljs-literal,
+                .hljs-type,
+                .hljs-params {
+                    color: #fbbc88;
+                }
+
+                .hljs-string,
+                .hljs-symbol,
+                .hljs-bullet {
+                    color: #b9f18d;
+                }
+
+                .hljs-title,
+                .hljs-section {
+                    color: #faf594;
+                }
+
+                .hljs-keyword,
+                .hljs-selector-tag {
+                    color: #70cff8;
+                }
+
+                .hljs-emphasis {
+                    font-style: italic;
+                }
+
+                .hljs-strong {
+                    font-weight: 700;
                 }
             }
         }

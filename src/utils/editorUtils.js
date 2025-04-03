@@ -143,7 +143,44 @@ export const getNodeInfo = (editor) => {
     }
 
     return '';
-};       
+};    
+
+// 插入表格的方法
+export const insertTable = (editor) => {
+    if (editor) {
+        editor.chain().focus().insertTable({ rows: 3, cols: 3 }).run()
+    }
+}
+
+// 新增行
+export const addRow = (editor, count = 1) => {
+    if (editor) {
+        for (let i = 0; i < count; i++) {
+            editor.chain().focus().addRowAfter().run(); 
+        }
+    }
+};
+
+// 删除行
+export const deleteRow = (editor) => {
+    if (editor) {
+        editor.chain().focus().deleteRow().run();
+    }
+};
+
+// 新增列
+export const addColumn = (editor) => {
+    if (editor) {
+        editor.chain().focus().addColumnAfter().run();
+    }
+};
+
+// 删除列
+export const deleteColumn = (editor) => {
+    if (editor) {
+        editor.chain().focus().deleteColumn().run();
+    }
+};
 
 // // 获取选中文本的font-size属性值
 // export function getSelectedTextFontSize() {

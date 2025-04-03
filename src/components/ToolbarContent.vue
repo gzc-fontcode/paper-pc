@@ -144,6 +144,15 @@
         </el-tooltip>
         <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
             <template #content>
+                插入表格<br />
+                Ctrl T
+            </template>
+            <div class="toolbar-btn" @click="insertTable(editor)">
+                <i class="iconfont icon-table"></i>
+            </div>
+        </el-tooltip>
+        <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
+            <template #content>
                 插入链接<br />
                 Ctrl K
             </template>
@@ -172,6 +181,7 @@ import {
     toggleSuperscript,
     toggleSubscript,
     setHeading, // 引入设置标题的函数
+    insertTable, // 引入插入表格的函数
 } from '@/utils/editorUtils'
 
 // 注入编辑器实例

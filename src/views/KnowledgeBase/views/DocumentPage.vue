@@ -30,6 +30,10 @@ import { FontFamily } from '@tiptap/extension-font-family'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import Heading from '@tiptap/extension-heading'
+import Table from '@tiptap/extension-table'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import TableCell from '@tiptap/extension-table-cell'
 import DocumentHeader from '../../../components/DocumentHeader.vue'
 import DocumentEditor from '@/components/DocumentEditor.vue'
 import { debounce } from '@/utils/utils'
@@ -45,7 +49,7 @@ const editorInfo = reactive({
     nodeInfo: {
         // 节点类型，如 'paragraph', 'heading' 等
         nodeType: '',
-    }
+    },
 })
 // 切换编辑器的可编辑状态
 const toggleEditable = () => {
@@ -128,6 +132,7 @@ const document = ref({
             </span>
           </strong>
         </p>
+        <table style="min-width: 75px"><colgroup><col style="min-width: 25px"><col style="min-width: 25px"><col style="min-width: 25px"></colgroup><tbody><tr><td colspan="1" rowspan="1"><p>123</p></td><td colspan="1" rowspan="1"><p>789</p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p>456</p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table>
       `,
     date: '2024-01-01 00:00',
 })
@@ -156,6 +161,10 @@ const editor = new Editor({
         Paragraph,
         Text,
         Heading,
+        Table,
+        TableHeader,
+        TableRow,
+        TableCell,
     ],
     // 初始内容
     content: document.value.content,
@@ -207,7 +216,8 @@ provide('editorInfo', editorInfo)
     border-left: 2px solid rgba(0, 0, 0, 0.04);
     .doc-body {
         padding: 52px 20px 0;
-        min-height: 100vh;
+        height: 100vh;
+        box-sizing: border-box;
     }
 }
 </style>

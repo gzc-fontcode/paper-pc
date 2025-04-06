@@ -13,9 +13,18 @@
   </template>
   
   <script setup>
+  import { onMounted, provide } from "vue";
   import SideBar from "./sidebar/SideBar.vue";
+  import useKnowledgeStore from "@/hooks/useKnowledgeStore";
 
+  const { knowledgeBases, loadKnowledgeBases } = useKnowledgeStore();
+  onMounted(async () => {
+    await loadKnowledgeBases(); // 加载知识库列表
+  })
 
+  // 提供知识库数据给子组件
+  provide("knowledgeBases", knowledgeBases);
+  provide("loadKnowledgeBases", loadKnowledgeBases);
   </script>
   
   <style lang="scss" scoped>

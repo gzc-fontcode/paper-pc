@@ -15,31 +15,8 @@
             prefix-icon="el-icon-search"
             clearable
         />
-
         <!-- 菜单 -->
         <SideBarMenu />
-
-        <!-- 底部菜单 -->
-        <!-- <div class="sidebar-footer">
-            <el-menu
-                class="footer-menu"
-                :default-active="activeMenuStore.activeMenu"
-                @select="handleMenuSelect"
-            >
-                <el-menu-item index="space-manage">
-                    <i class="el-icon-setting"></i>
-                    <span>空间管理</span>
-                </el-menu-item>
-                <el-menu-item index="public-page">
-                    <i class="el-icon-s-grid"></i>
-                    <span>空间公开页</span>
-                </el-menu-item>
-                <el-menu-item index="more">
-                    <i class="el-icon-more"></i>
-                    <span>更多</span>
-                </el-menu-item>
-            </el-menu>
-        </div> -->
     </el-aside>
 </template>
 

@@ -11,7 +11,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
+import { ElMessage } from 'element-plus'
+import { deleteKnowledgeBase } from '@/api/storage'
+
+const loadKnowledgeBases = inject('loadKnowledgeBases')
 
 const visible = ref(false)
 const currentItemToDelete = ref(null)
@@ -21,8 +25,18 @@ const showDialog = (item) => {
     visible.value = true
 }
 
-const confirmDelete = () => {
+const confirmDelete = async () => {
     console.log(`删除知识库${currentItemToDelete.value}`)
+    try {
+        await deleteKnowledgeBase(currentItemToDelete.value)
+        ElMessage.success('知识库删除成功')
+        if (loadKnowledgeBases) {
+            loadKnowledgeBases()
+        }
+    } catch (error) {
+        console.error('删除知识库失败', error)
+        ElMessage.error('删除知识库失败')
+    }
     visible.value = false
 }
 

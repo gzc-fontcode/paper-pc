@@ -24,4 +24,20 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    proxy: {
+      // 用户相关接口代理
+      '/user-api': {
+        target: 'http://47.109.72.203:20001', // 替换为实际的接口服务器地址
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/user-api/, '')
+      },
+      // 知识库相关接口代理
+      '/know-api': {
+        target: 'http://47.109.72.203:20000', // 新服务地址
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/know-api/, '') // 可选路径重写
+      }
+    }
+  },
 })

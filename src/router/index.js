@@ -47,7 +47,7 @@ const routes = [
     },
     // 添加动态路由
     {
-        path: '/knowledge-base/:id',
+        path: '/knowledge-base/:spaceType/:id',
         name: 'KnowledgeBase',
         component: KnowledgeBase,
         children: [
@@ -77,20 +77,22 @@ const router = createRouter({
     routes,
 })
 
-// 路由守卫：检查是否需要登录
-router.beforeEach((to, from, next) => {
-    const isAuthenticated = localStorage.getItem('token') // 假设通过 `token` 判断登录状态
-
-    //   if (to.meta.requiresAuth && !isAuthenticated) {
-    //     // 如果未登录，跳转到登录页面
-    //     next({ name: "Login" });
-    //   } else if (to.meta.guest && isAuthenticated) {
-    //     // 如果已登录但访问访客页面，跳转到系统页面
-    //     next({ name: "Dashboard" });
-    //   } else {
-    //     next(); // 正常跳转
-    //   }
-    next()
+// 添加全局前置守卫
+router.beforeEach((to, from) => {
+  const token = localStorage.getItem('token');
+  
+  // 新增：如果已登录且访问登录页，重定向到仪表盘
+  if (to.path === '/login' && token) {
+    return '/dashboard';
+  }
+  
+  // 原有认证检查
+  if (to.meta.requiresAuth && !token) {
+    return {
+      path: '/login',
+      query: { redirect: to.fullPath },
+    };
+  }
 })
 
 export default router

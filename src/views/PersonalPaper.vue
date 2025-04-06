@@ -10,14 +10,20 @@
                 <!-- 常用 -->
 
                 <!-- 我的知识库 -->
+                <!-- 修改模板部分 -->
                 <div class="paper-list">
-                    <el-card v-for="o in 8" :key="o" @click="navigateToKnowledgeBase(o)">
+                    <el-card
+                        v-for="kb in knowledgeBases"
+                        :key="kb.id"
+                        @click="navigateToKnowledgeBase(kb.id)"
+                    >
                         <template #header>
                             <div class="card-header">
                                 <div class="paper-name">
                                     <img src="@/assets/icon/book-solid.svg" alt="" />
-                                    <span>知识库{{ o }}</span>
+                                    <span>{{ kb.name }}</span>
                                 </div>
+                                <!-- 保持原有操作按钮 -->
                                 <div class="paper-operation">
                                     <el-popover placement="bottom" trigger="click">
                                         <template #reference>
@@ -30,7 +36,7 @@
                                             <el-button
                                                 type="danger"
                                                 text
-                                                @click="showDeleteDialog(o)"
+                                                @click="showDeleteDialog(kb.id)"
                                                 >删除</el-button
                                             >
                                         </div>
@@ -57,36 +63,55 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import DeleteDialog from '@/components/DeleteDialog.vue';
-import CreateDialog from '@/components/CreateDialog.vue';
-import { Plus } from '@element-plus/icons-vue';
+import { ref, onMounted, inject } from 'vue'
+import { useRouter } from 'vue-router'
+import DeleteDialog from '@/components/DeleteDialog.vue'
+import CreateDialog from '@/components/CreateDialog.vue'
+import { Plus } from '@element-plus/icons-vue'
+import { getKnowledgeBaseList } from '@/api/storage' // 新增接口引入
 
-const router = useRouter();
-const deleteDialog = ref(null);
-const createDialog = ref(null);
+const router = useRouter()
+const deleteDialog = ref(null)
+const createDialog = ref(null)
+// const knowledgeBases = ref([]) // 替换原有的静态数据
+const knowledgeBases = inject('knowledgeBases') // 注入知识库数据
 
 const items = ref([
     { id: 1, name: '文档1', modifyTime: '2023-01-01 12:00:00' },
     { id: 2, name: '文档2', modifyTime: '2023-02-01 12:00:00' },
     { id: 3, name: '文档3', modifyTime: '2023-03-01 12:00:00' },
     { id: 4, name: '文档4', modifyTime: '2023-04-01 12:00:00' },
-]);
+])
+
+// 新增数据获取逻辑
+onMounted(() => {
+    // 获取知识库列表
+    // fetchKnowledgeBaseList()
+})
+
+// // 获取知识库列表
+// const fetchKnowledgeBaseList = async () => {
+//     try {
+//         const res = await getKnowledgeBaseList({ spaceType: 'private' })
+//         knowledgeBases.value = res.data || []
+//     } catch (error) {
+//         console.error('获取知识库列表失败', error)
+//     }
+// }
+
+// 修改后的点击事件方法
+const navigateToKnowledgeBase = (id) => {
+    const route = router.resolve({ name: 'KnowledgeBase', params: { id, spaceType: 'private' } })
+    window.open(route.href, '_blank')
+}
 
 const showDeleteDialog = (item) => {
-    deleteDialog.value.showDialog(item);
-};
+    deleteDialog.value.showDialog(item)
+}
 
 const showCreateDialog = () => {
-    createDialog.value.showDialog();
-};
-
-const navigateToKnowledgeBase = (id) => {
-    const route = router.resolve({ name: 'KnowledgeBase', params: { id } });
-    window.open(route.href, '_blank');
-};
-
+    createDialog.value.showDialog()
+}
 </script>
 
 <style lang="scss" scoped>

@@ -18,22 +18,10 @@
         <!-- 动态显示子菜单 -->
         <!-- 动态显示子菜单 -->
         <div v-if="expandStore.isExpand[0]" class="submenu">
-            <el-menu-item>
-                <a :href="`/knowledge-base/${1}`" target="_blank">
+            <el-menu-item v-for="kb in knowledgeBases" :key="kb.id">
+                <a :href="`/knowledge-base/${kb.id}`" target="_blank">
                     <img src="@/assets/icon/book-solid.svg" alt="" />
-                    <span>知识库项A</span>
-                </a>
-            </el-menu-item>
-            <el-menu-item>
-                <a :href="`/knowledge-base/${2}`" target="_blank">
-                    <img src="@/assets/icon/book-solid.svg" alt="" />
-                    <span>知识库项B</span>
-                </a>
-            </el-menu-item>
-            <el-menu-item>
-                <a :href="`/knowledge-base/${3}`" target="_blank">
-                    <img src="@/assets/icon/book-solid.svg" alt="" />
-                    <span>知识库项C</span>
+                    <span>{{ kb.name }}</span>
                 </a>
             </el-menu-item>
         </div>
@@ -78,18 +66,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useExpandStore } from '@/stores/home-page/expandStore.js';
-import { useActiveMenuStore } from '@/stores/home-page/activeMenuStore.js';
+import { ref, onMounted, inject } from 'vue'
+import { useExpandStore } from '@/stores/home-page/expandStore.js'
+import { useActiveMenuStore } from '@/stores/home-page/activeMenuStore.js'
+import { getKnowledgeBaseList } from '@/api/storage' // 新增接口引入
 
-const activeMenuStore = useActiveMenuStore();
+// 注入知识库列表
+const knowledgeBases = inject('knowledgeBases', [])
+
+// // 新增知识库列表响应式数据
+// const knowledgeBases = ref([])
+
+// onMounted(async () => {
+//     try {
+//         // 个人知识库列表
+//         const res = await getKnowledgeBaseList({spaceType: 'private'})
+//         knowledgeBases.value = res.data
+//     } catch (error) {
+//         console.error('获取知识库失败', error)
+//     }
+// })
+
+const activeMenuStore = useActiveMenuStore()
 function handleMenuSelect(menuIndex) {
-    activeMenuStore.setActiveMenu(menuIndex); // 更新 Pinia 状态
+    activeMenuStore.setActiveMenu(menuIndex) // 更新 Pinia 状态
 }
 
-const expandStore = useExpandStore();
+const expandStore = useExpandStore()
 function switchExpand(index) {
-    expandStore.setExpand(index);
+    expandStore.setExpand(index)
 }
 </script>
 

@@ -7,7 +7,7 @@
             </el-form-item>
             <el-form-item>
                 <el-input
-                    v-model="form.description"
+                    v-model="form.remark"
                     type="textarea"
                     placeholder="知识库简介（选填）"
                 ></el-input>
@@ -22,21 +22,50 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps, inject } from 'vue'
+import { createKnowledgeBase } from '@/api/storage'
+import { ElMessage } from 'element-plus'
+
+// // 定义组件的props
+// const props = defineProps({
+//     fetchKnowledgeBaseList: {
+//         type: Function,
+//         required: true,
+//     },
+// })
+
+// 注入知识库数据
+const loadKnowledgeBases = inject('loadKnowledgeBases')
 
 const visible = ref(false)
 const form = ref({
     name: '',
-    description: '',
+    remark: '', // 简介
+    spaceType: 'private', // 知识库类型，默认为私有
 })
 
 const showDialog = () => {
     visible.value = true
 }
 
-const confirmCreate = () => {
+const confirmCreate = async () => {
     console.log('创建知识库:', form.value)
-    visible.value = false
+    try {
+        await createKnowledgeBase({...form.value})
+        visible.value = false
+        form.value = {
+            name: '',
+            remark: '',
+            spaceType: 'private',
+        }
+        ElMessage.success('知识库创建成功')
+        // 调用父组件的方法刷新知识库列表
+        // props.fetchKnowledgeBaseList()
+        loadKnowledgeBases()
+    } catch (error) {
+        ElMessage.error('创建知识库失败')
+        console.error('创建知识库失败:', error)
+    }
 }
 
 const isCreateButtonDisabled = computed(() => {

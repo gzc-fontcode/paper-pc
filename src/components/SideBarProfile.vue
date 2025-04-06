@@ -48,8 +48,9 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { ElDrawer } from 'element-plus'
+import { ElDrawer, ElMessage } from 'element-plus'
 import PersonalSpace from './PersonalSpace.vue' // 假设 PersonalSpace.vue 在 views 目录下
+import { logout as userLogout } from '@/api/user' // 新增接口引入
 
 const router = useRouter()
 const personalSpaceDrawerVisible = ref(false)
@@ -61,15 +62,19 @@ const openPersonalSpaceDrawer = () => {
 const logout = async () => {
     try {
         // 调用退出登录接口
-        // await axios.post('/api/logout');
-
+        // await userLogout();
+        
         // 清除本地存储中的用户信息
+        localStorage.removeItem('token');
+        // 如果需要可以同时清除其他用户信息
         // localStorage.removeItem('user');
-
+        
+        ElMessage.success('退出成功');
         // 路由跳转至登录页
-        router.push('/login')
+        router.push('/login');
     } catch (error) {
-        console.error('退出登录失败', error)
+        ElMessage.error('退出登录失败');
+        console.error('退出登录失败', error);
     }
 }
 const handleDrawerClose = () => {

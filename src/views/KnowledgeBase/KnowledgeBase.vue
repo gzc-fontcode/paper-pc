@@ -115,6 +115,7 @@ const generateUniqueId = () => {
 const { 
   treeData, 
   defaultProps,
+  loading,
   addDocument,
   loadFolders,
   addFolder,
@@ -141,6 +142,7 @@ provide('spaceType', spaceType);
 provide('knowledgeBaseId', knowledgeBaseId);
 provide('addDocument', addDocument);
 provide('treeData', treeData);
+provide('loading', loading);
 provide('defaultProps', defaultProps);
 provide('loadFolders', loadFolders);
 provide('addFolder', addFolder);

@@ -21,7 +21,6 @@ export default function useDocumentTree(knowledgeBaseId) {
       const storageIdValue = typeof knowledgeBaseId === 'object' && knowledgeBaseId.value ? knowledgeBaseId.value : knowledgeBaseId;
       const res = await getFolderList({ storageId: storageIdValue });
       treeData.value = res.data;
-      console.log(treeData.value, 'loadFolders');
     } catch (error) {
       ElMessage.error('获取文档结构失败');
     } finally {
@@ -38,7 +37,6 @@ export default function useDocumentTree(knowledgeBaseId) {
         date: new Date().toLocaleString(),
         parentId: parentNode ? parentNode.id : null
       };
-      console.log(knowledgeBaseId, 'newFolder');
       
       // 确保 knowledgeBaseId 是普通值
       const storageIdValue = typeof knowledgeBaseId === 'object' && knowledgeBaseId.value ? knowledgeBaseId.value : knowledgeBaseId;

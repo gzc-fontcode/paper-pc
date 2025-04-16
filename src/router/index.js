@@ -26,7 +26,7 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: Layout,
-        // meta: { requiresAuth: true }, // 标记为需要认证
+        meta: { requiresAuth: true }, // 标记为需要认证
         children: [
             {
                 path: '',

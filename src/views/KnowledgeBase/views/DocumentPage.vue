@@ -7,7 +7,11 @@
         />
         <!-- 这里可以显示文档的具体内容 -->
         <div class="doc-body">
-            <DocumentEditor :document="document" :isEditable="editorInfo.isEditable" />
+            <DocumentEditor
+                :document="document"
+                :isEditable="editorInfo.isEditable"
+                @paste="handlePaste(editor, $event)"
+            />
         </div>
     </div>
 </template>
@@ -36,6 +40,8 @@ import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import CodeBlock from '@tiptap/extension-code-block'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import Dropcursor from '@tiptap/extension-dropcursor'
+import Image from '@tiptap/extension-image' // 引入 Image 扩展
 import { all, createLowlight } from 'lowlight'
 import css from 'highlight.js/lib/languages/css'
 import js from 'highlight.js/lib/languages/javascript'
@@ -45,7 +51,7 @@ import DocumentHeader from '../../../components/DocumentHeader.vue'
 import DocumentEditor from '@/components/DocumentEditor.vue'
 import CodeBlockComponent from '@/components/CodeBlockComponent.vue'
 import { debounce } from '@/utils/utils'
-import { getNodeInfo } from '@/utils/editorUtils'
+import { getNodeInfo, handlePaste } from '@/utils/editorUtils'
 
 const lowlight = createLowlight(all)
 
@@ -181,13 +187,13 @@ const editor = new Editor({
         TableHeader,
         TableRow,
         TableCell,
-        CodeBlockLowlight
-          .extend({
+        Image,
+        Dropcursor,
+        CodeBlockLowlight.extend({
             addNodeView() {
-              return VueNodeViewRenderer(CodeBlockComponent)
+                return VueNodeViewRenderer(CodeBlockComponent)
             },
-          })
-          .configure({ lowlight }),
+        }).configure({ lowlight }),
     ],
     // 初始内容
     content: document.value.content,

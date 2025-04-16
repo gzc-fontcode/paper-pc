@@ -36,8 +36,8 @@ service.interceptors.request.use(
       console.log(error);
       // 处理401未授权
       if (error.response?.status === 401) {
-        // localStorage.removeItem('token');
-        // window.location.href = '/login'; // 跳转登录页
+        localStorage.removeItem('token');
+        window.location.href = '/login'; // 跳转登录页
       }
       return Promise.reject(error);
     }

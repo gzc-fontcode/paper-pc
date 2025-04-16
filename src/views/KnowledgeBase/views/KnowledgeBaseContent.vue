@@ -47,7 +47,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const loading = ref(false);
+// const loading = ref(false);
 
 // 使用 computed 确保响应式
 const knowledgeBaseInfo = inject('knowledgeBaseInfo');
@@ -61,13 +61,11 @@ const spaceType = computed(() => knowledgeBaseInfo.value?.spaceType);
 const treeData = inject('treeData');
 const defaultProps = inject('defaultProps');
 const loadFolders = inject('loadFolders');
+const loading = inject('loading');
 
 // 封装加载数据的函数，可添加重试机制
 const fetchKnowledgeBaseData = async (id) => {
   try {
-    // 模拟异步请求
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(`加载知识库 ID: ${id}`);
     // 这里可以更新 treeData
     await loadFolders();
   } catch (error) {
@@ -78,9 +76,7 @@ const fetchKnowledgeBaseData = async (id) => {
 
 // 在组件挂载时加载知识库数据
 onMounted(async () => {
-  loading.value = true;
   await fetchKnowledgeBaseData(knowledgeBaseId.value);
-  loading.value = false;
 });
 </script>
 

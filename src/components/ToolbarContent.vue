@@ -152,6 +152,19 @@
             </div>
         </el-tooltip>
         <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
+            <template #content> 插入图片<br /> </template>
+            <div class="toolbar-btn" @click="() => fileInput.click()">
+                <input
+                    ref="fileInput"
+                    type="file"
+                    accept="image/*"
+                    @change="insertImage(editor, $event)"
+                    style="display: none"
+                />
+                <i class="iconfont icon-image"></i>
+            </div>
+        </el-tooltip>
+        <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
             <template #content>
                 插入链接<br />
                 Ctrl K
@@ -192,6 +205,7 @@ import {
     setHeading, // 引入设置标题的函数
     insertTable, // 引入插入表格的函数
     insertCodeBlock, // 引入插入代码块的函数
+    insertImage, // 引入插入图片的函数
 } from '@/utils/editorUtils'
 
 // 注入编辑器实例
@@ -201,6 +215,10 @@ const editorInfo = inject('editorInfo')
 
 // 存储当前节点类型
 const currentNodeType = ref('')
+
+// 处理文件选择
+const fileInput = ref(null)
+
 </script>
 
 <style lang="scss" scoped>

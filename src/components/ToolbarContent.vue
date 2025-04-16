@@ -182,6 +182,19 @@
                 <i class="iconfont icon-code-block"></i>
             </div>
         </el-tooltip>
+        <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
+            <template #content> 插入附件<br /> </template>
+            <div class="toolbar-btn" @click="() => attachmentInput.click()">
+                <input
+                    ref="attachmentInput"
+                    type="file"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                    @change="handleAttachmentUpload(editor, $event)"
+                    style="display: none"
+                />
+                <i class="iconfont icon-wenjian"></i>
+            </div>
+        </el-tooltip>
     </div>
 </template>
 
@@ -206,6 +219,7 @@ import {
     insertTable, // 引入插入表格的函数
     insertCodeBlock, // 引入插入代码块的函数
     insertImage, // 引入插入图片的函数
+    handleAttachmentUpload // 引入处理附件上传的函数
 } from '@/utils/editorUtils'
 
 // 注入编辑器实例
@@ -218,7 +232,8 @@ const currentNodeType = ref('')
 
 // 处理文件选择
 const fileInput = ref(null)
-
+// 处理附件选择
+const attachmentInput = ref(null)
 </script>
 
 <style lang="scss" scoped>

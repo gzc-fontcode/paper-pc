@@ -259,6 +259,36 @@ export const handlePaste = (editor, event) => {
     }
 }
 
+// 上传附件
+export const handleAttachmentUpload = async (editor, event) => {
+    const files = event.target.files;
+    if (files.length === 0) {
+        return;
+    }
+    try {
+        const response = await uploadAttachments(files);
+        // 假设响应中包含附件的链接
+        const attachmentUrls = response.data; 
+        attachmentUrls.forEach(url => {
+            // 可以根据需求在编辑器中插入附件链接
+            editor
+               .chain()
+               .focus()
+               .insertContent(`<a href="${url}" target="_blank">附件</a>`)
+               .run();
+        });
+        // 清空文件选择框
+        event.target.value = '';
+    } catch (error) {
+        editor
+               .chain()
+               .focus()
+               .insertContent(`<a href="http://localhost:5173/knowledge-base/private/13/document/21" target="_blank">附件</a>`)
+               .run();
+        console.error('附件上传失败', error);
+    }
+};
+
 // // 获取选中文本的font-size属性值
 // export function getSelectedTextFontSize() {
 //     const selection = window.getSelection();

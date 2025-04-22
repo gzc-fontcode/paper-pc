@@ -18,6 +18,15 @@ export function createFolder(data) {
   });
 }
 
+// 删除文件夹
+export function deleteFolder(data) {
+  return request({
+    url: '/folder/delete',
+    method: 'post',
+    data
+  });  
+}
+
 // 重命名文件夹
 export function renameFolder(data) {
   return request({

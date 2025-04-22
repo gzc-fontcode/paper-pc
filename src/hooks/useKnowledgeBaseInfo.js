@@ -12,6 +12,7 @@ export default function useKnowledgeBaseInfo(spaceType, id) {
       const res = await getKnowledgeBaseList({ spaceType, id });
       if (res.data[0]) {
         knowledgeBaseInfo.value = res.data[0];
+        knowledgeBaseInfo.value.spaceType = knowledgeBaseInfo.value.spaceType ==='0' ? 'private' : '';
       }
     } catch (err) {
       error.value = err;

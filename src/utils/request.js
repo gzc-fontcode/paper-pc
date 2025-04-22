@@ -3,7 +3,7 @@ import axios from 'axios';
 // 用户相关axios实例
 const service = axios.create({
   baseURL: '/user-api', // 与 Vite 配置的代理路径一致
-  timeout: 5000, // 请求超时时间
+  timeout: 10000, // 请求超时时间
 });
 
 // 请求拦截器

@@ -1,5 +1,4 @@
-import { nextTick } from 'vue';
-
+import { nextTick } from 'vue'
 
 // 撤销操作
 export const undo = (editor) => {
@@ -238,18 +237,18 @@ export const handlePaste = (editor, event) => {
                     const reader = new FileReader()
                     reader.onload = (e) => {
                         const src = e.target.result
-                            editor
-                                .chain()
-                                .focus()
-                                .insertContent({
-                                    type: 'image',
-                                    attrs: {
-                                        src,
-                                        alt: '插入的图片',
-                                        title: '插入的图片',
-                                    },
-                                })
-                                .run()
+                        editor
+                            .chain()
+                            .focus()
+                            .insertContent({
+                                type: 'image',
+                                attrs: {
+                                    src,
+                                    alt: '插入的图片',
+                                    title: '插入的图片',
+                                },
+                            })
+                            .run()
                     }
                     reader.readAsDataURL(blob)
                 }
@@ -261,33 +260,31 @@ export const handlePaste = (editor, event) => {
 
 // 上传附件
 export const handleAttachmentUpload = async (editor, event) => {
-    const files = event.target.files;
+    const files = event.target.files
     if (files.length === 0) {
-        return;
+        return
     }
     try {
-        const response = await uploadAttachments(files);
+        const response = await uploadAttachments(files)
         // 假设响应中包含附件的链接
-        const attachmentUrls = response.data; 
-        attachmentUrls.forEach(url => {
+        const attachmentUrls = response.data
+        attachmentUrls.forEach((url) => {
             // 可以根据需求在编辑器中插入附件链接
-            editor
-               .chain()
-               .focus()
-               .insertContent(`<a href="${url}" target="_blank">附件</a>`)
-               .run();
-        });
+            editor.chain().focus().insertContent(`<a href="${url}" target="_blank">附件</a>`).run()
+        })
         // 清空文件选择框
-        event.target.value = '';
+        event.target.value = ''
     } catch (error) {
         editor
-               .chain()
-               .focus()
-               .insertContent(`<a href="http://localhost:5173/knowledge-base/private/13/document/21" target="_blank">附件</a>`)
-               .run();
-        console.error('附件上传失败', error);
+            .chain()
+            .focus()
+            .insertContent(
+                `<a href="http://47.109.72.203:20000/file/download/35" download="sample.pdf">附件</a>`
+            )
+            .run()
+        console.error('附件上传失败', error)
     }
-};
+}
 
 // // 获取选中文本的font-size属性值
 // export function getSelectedTextFontSize() {

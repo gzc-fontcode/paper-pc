@@ -3,7 +3,7 @@ import axios from "axios";
 // 知识库相关axios实例
 const service = axios.create({
   baseURL: '/know-api', // 与 Vite 配置的代理路径一致
-  timeout: 5000, // 请求超时时间
+  timeout: 10000, // 请求超时时间
 });
 
 // 请求拦截器
@@ -13,8 +13,6 @@ service.interceptors.request.use(
       const token = localStorage.getItem('token');
       if (token) {
         config.headers.token = `${token}`;
-        // 打印请求路径
-        console.log('请求路径', config);
       }
       return config;
     },

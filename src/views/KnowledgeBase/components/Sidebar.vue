@@ -30,6 +30,7 @@
             :props="defaultProps"
             node-key="id"
             :default-expanded-keys="expandedKeys"
+            :auto-expand-parent="false"
             :highlight-current="true"
             @node-click="handleNodeClick"
             @node-expand="handleExpand"

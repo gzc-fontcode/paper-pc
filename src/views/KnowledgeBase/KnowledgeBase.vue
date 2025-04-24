@@ -30,7 +30,7 @@ const knowledgeBaseId = ref(route.params.id)
 const spaceType = ref(route.params.spaceType)
 
 // 自定义 Hook 用于获取知识库信息
-const { knowledgeBaseInfo } = useKnowledgeBaseInfo(spaceType.value, knowledgeBaseId.value)
+const { knowledgeBaseInfo, updateKnowledgeBaseInfo } = useKnowledgeBaseInfo(spaceType.value, knowledgeBaseId.value)
 
 // 使用文档树Hook
 const {
@@ -64,6 +64,7 @@ onMounted(() => {
 })
 
 provide('knowledgeBaseInfo', knowledgeBaseInfo)
+provide('updateKnowledgeBaseInfo', updateKnowledgeBaseInfo)
 provide('spaceType', spaceType)
 provide('knowledgeBaseId', knowledgeBaseId)
 provide('addDocument', addDocument)

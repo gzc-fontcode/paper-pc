@@ -26,3 +26,12 @@ export function deleteKnowledgeBase(id) {
     data: { id }
   });
 }
+
+// 更新知识库
+export function updateKnowledgeBase(data) {
+  return request({
+    url: '/storage/update',
+    method: 'post',
+    data
+  });  
+}

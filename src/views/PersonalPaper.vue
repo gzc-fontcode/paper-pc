@@ -89,16 +89,6 @@ onMounted(() => {
     // fetchKnowledgeBaseList()
 })
 
-// // 获取知识库列表
-// const fetchKnowledgeBaseList = async () => {
-//     try {
-//         const res = await getKnowledgeBaseList({ spaceType: 'private' })
-//         knowledgeBases.value = res.data || []
-//     } catch (error) {
-//         console.error('获取知识库列表失败', error)
-//     }
-// }
-
 // 修改后的点击事件方法
 const navigateToKnowledgeBase = (id) => {
     const route = router.resolve({ name: 'KnowledgeBase', params: { id, spaceType: 'private' } })

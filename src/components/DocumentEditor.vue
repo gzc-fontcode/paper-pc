@@ -1,6 +1,6 @@
 <template>
     <div class="doc-edit">
-        <ToolbarContent />
+        <ToolbarContent v-show="editorInfo.isEditable" />
         <div class="editor-content">
             <editor-content :editor="editor" @contextmenu="handleTableContextMenu" />
             <!-- 表格编辑的弹出框 -->
@@ -100,6 +100,7 @@ const handleTableContextMenu = (event) => {
 }
 
 const editor = inject('editor')
+const editorInfo = inject('editorInfo')
 </script>
 
 <style lang="scss" scoped>

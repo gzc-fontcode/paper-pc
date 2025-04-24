@@ -3,15 +3,38 @@
         <div class="header">
             <!-- <el-icon :name="folder"></el-icon> -->
             <h1 class="title">
-                <img src="@/assets/icon/book-solid.svg" alt="" />
-                <span>{{ knowledgeBaseName }}</span>
+                <!-- 点击标题切换为输入框 -->
+                <template v-if="!isEditingTitle">
+                    <img src="@/assets/icon/book-solid.svg" alt="" />
+                    <span @click="startEditingTitle">{{ knowledgeBaseName }}</span>
+                </template>
+                <template v-else>
+                    <img src="@/assets/icon/book-solid.svg" alt="" />
+                    <el-input
+                        v-model="editedTitle"
+                        :autofocus="true"
+                        @blur="saveTitle"
+                        @keyup.enter="saveTitle"
+                    />
+                </template>
             </h1>
         </div>
         <!-- 知识库简介 -->
         <div class="introduction">
-            <p>
-                {{ knowledgeBaseInfo?.remark || '暂无简介' }}
-            </p>
+            <!-- 点击简介切换为输入框 -->
+            <template v-if="!isEditingRemark">
+                <p @click="startEditingRemark">
+                    {{ knowledgeBaseInfo?.remark || '暂无简介' }}
+                </p>
+            </template>
+            <template v-else>
+                <el-input
+                    ref="remarkInputRef"
+                    v-model="editedRemark"
+                    type="textarea"
+                    @blur="saveRemark"
+                />
+            </template>
         </div>
         <!-- 加载提示 -->
         <div v-if="loading" class="loading">正在加载知识库数据...</div>
@@ -35,9 +58,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject, computed } from 'vue'
+import { onMounted, ref, inject, computed, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElTree } from 'element-plus'
+import { ElTree, ElInput } from 'element-plus'
 import useDocumentTree from '@/hooks/useDocumentTree'
 
 const props = defineProps({
@@ -48,10 +71,9 @@ const props = defineProps({
 })
 
 const route = useRoute()
-// const loading = ref(false);
-
 // 使用 computed 确保响应式
 const knowledgeBaseInfo = inject('knowledgeBaseInfo')
+const updateKnowledgeBaseInfo = inject('updateKnowledgeBaseInfo')
 
 // 创建计算属性避免直接解构 null
 const knowledgeBaseId = computed(() => knowledgeBaseInfo.value?.id)
@@ -62,6 +84,49 @@ const treeData = inject('treeData')
 const defaultProps = inject('defaultProps')
 const loadFolders = inject('loadFolders')
 const loading = inject('loading')
+
+const remarkInputRef = ref(null)
+// 控制编辑状态的响应式变量
+const isEditingTitle = ref(false)
+const isEditingRemark = ref(false)
+const editedTitle = ref('')
+const editedRemark = ref('')
+
+// 开始编辑标题
+const startEditingTitle = () => {
+    isEditingTitle.value = true
+    editedTitle.value = knowledgeBaseName.value
+}
+
+// 保存标题
+const saveTitle = async () => {
+    if (editedTitle.value === '') {
+        ElMessage.error('知识库名称不能为空')
+        return
+    }
+    if (editedTitle.value !== knowledgeBaseName.value) {
+        updateKnowledgeBaseInfo({ name: editedTitle.value })
+    }
+    isEditingTitle.value = false
+}
+
+// 开始编辑简介
+const startEditingRemark = () => {
+    isEditingRemark.value = true
+    editedRemark.value = knowledgeBaseInfo.value?.remark || ''
+    // 确保输入框获取焦点
+    nextTick(() => {
+        remarkInputRef.value?.focus()
+    })
+}
+
+// 保存简介
+const saveRemark = async () => {
+    if (editedRemark.value !== knowledgeBaseInfo.value?.remark) {
+        updateKnowledgeBaseInfo({ remark: editedRemark.value })
+    }
+    isEditingRemark.value = false
+}
 
 // 封装加载数据的函数，可添加重试机制
 const fetchKnowledgeBaseData = async (id) => {
@@ -99,15 +164,33 @@ onMounted(async () => {
             align-items: center;
             gap: 8px;
             margin-bottom: 30px;
+            span {
+                padding: 3px;
+                border-radius: 5px;
+                cursor: pointer;
+                &:hover {
+                    color: #3c7280;
+                    background-color: rgba(140, 193, 220, 0.5);
+                    border: 1px solid #3c7280;
+                }
+            }
         }
     }
     .introduction {
         margin-bottom: 20px;
         p {
+            padding: 3px;
             font-size: 16px;
             line-height: 1.6;
             color: #666;
             margin: 0;
+            border-radius: 5px;
+            cursor: pointer;
+            &:hover {
+                color: #3c7280;
+                background-color: rgba(140, 193, 220, 0.5);
+                border: 1px solid #3c7280;
+            }
         }
     }
 }

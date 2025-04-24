@@ -3,7 +3,6 @@
         <div class="doc-head-inner">
             <div class="doc-head-left">
                 <div class="doc-head-title">
-                    <span>{{ document.label }}</span>
                 </div>
             </div>
             <div class="doc-head-right">

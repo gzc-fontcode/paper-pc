@@ -22,14 +22,18 @@
                 <el-icon><Tickets /></el-icon>
                 <span>目录</span>
             </div>
-            <TreeAction type="folder"/>
+            <TreeAction type="folder" />
         </div>
         <el-tree
+            ref="treeRef"
             :data="treeData"
             :props="defaultProps"
             node-key="id"
-            :default-expanded-keys="[1]"
+            :default-expanded-keys="expandedKeys"
+            :highlight-current="true"
             @node-click="handleNodeClick"
+            @node-expand="handleExpand"
+            @node-collapse="handleCollapse"
         >
             <template #default="{ node, data }">
                 <div :class="`custom-tree-node`" @dblclick="startEditing(data)">
@@ -46,7 +50,7 @@
                         ref="inputRef"
                         autofocus
                     />
-                    <TreeAction :data="data" :type="data.type"/>
+                    <TreeAction :data="data" :type="data.type" />
                 </div>
             </template>
         </el-tree>
@@ -54,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, inject, computed, onMounted, nextTick } from 'vue'
+import { ref, watch, inject, computed, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElTree, ElMessage, ElInput } from 'element-plus'
 import TreeAction from '@/views/KnowledgeBase/components/TreeAction.vue'
@@ -70,6 +74,8 @@ const knowledgeBaseName = computed(() => knowledgeBaseInfo.value?.name || '加�
 
 const treeData = inject('treeData')
 const defaultProps = inject('defaultProps')
+const expandedKeys = inject('expandedKeys')
+const treeRef = inject('treeRef')
 
 defineProps({
     handleNodeClick: {
@@ -84,6 +90,18 @@ const router = useRouter()
 const isEditing = ref({})
 const tempName = ref('')
 const inputRef = ref(null)
+
+const handleExpand = (node) => {
+    if (!expandedKeys.value.includes(node.id)) {
+        expandedKeys.value.push(node.id)
+        sessionStorage.setItem('expandedKeys', JSON.stringify(expandedKeys.value))
+    }
+}
+
+const handleCollapse = (node) => {
+    expandedKeys.value = expandedKeys.value.filter((key) => key !== node.id)
+    sessionStorage.setItem('expandedKeys', JSON.stringify(expandedKeys.value))
+}
 
 // 开始编辑
 const startEditing = (data) => {
@@ -117,6 +135,10 @@ const saveRename = async (data) => {
 // 在组件挂载时加载数据
 onMounted(() => {
     // loadFolders();
+    // 恢复展开状态
+    if(sessionStorage.getItem('expandedKeys')) {
+        expandedKeys.value = JSON.parse(sessionStorage.getItem('expandedKeys'))
+    }
 })
 </script>
 

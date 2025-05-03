@@ -74,18 +74,8 @@ import { getKnowledgeBaseList } from '@/api/storage' // 新增接口引入
 // 注入知识库列表
 const knowledgeBases = inject('knowledgeBases', [])
 
-// // 新增知识库列表响应式数据
-// const knowledgeBases = ref([])
-
-// onMounted(async () => {
-//     try {
-//         // 个人知识库列表
-//         const res = await getKnowledgeBaseList({spaceType: 'private'})
-//         knowledgeBases.value = res.data
-//     } catch (error) {
-//         console.error('获取知识库失败', error)
-//     }
-// })
+// 注入团队列表
+const teamList = inject('teamList', [])
 
 const activeMenuStore = useActiveMenuStore()
 function handleMenuSelect(menuIndex) {

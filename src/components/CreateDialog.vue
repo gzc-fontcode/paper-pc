@@ -1,15 +1,16 @@
 <template>
-    <el-dialog class="create-dialog" title="新建知识库" v-model="visible" width="30%" center>
+    <el-dialog class="create-dialog" :title="dialogType.title" v-model="visible" width="30%" center>
         <el-form :model="form" label-width="0">
             <el-form-item class="name">
-                <img src="@/assets/icon/book-solid.svg" alt="" />
-                <el-input v-model="form.name" placeholder="知识库名称"></el-input>
+                <!-- 无需处理 @ 符号 -->
+                <img :src="dialogType.imgUrl" alt="" /> 
+                <el-input v-model="form.name" :placeholder="dialogType.namePlaceholder"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="dialogType.remarkPlaceholder">
                 <el-input
                     v-model="form.remark"
                     type="textarea"
-                    placeholder="知识库简介（选填）"
+                    :placeholder="dialogType.remarkPlaceholder"
                 ></el-input>
             </el-form-item>
         </el-form>
@@ -25,14 +26,35 @@
 import { ref, computed, defineProps, inject } from 'vue'
 import { createKnowledgeBase } from '@/api/storage'
 import { ElMessage } from 'element-plus'
+// 导入图片
+import bookIcon from '@/assets/icon/book-solid.svg'
+import teamIcon from '@/assets/icon/team-fill.svg'
 
-// // 定义组件的props
-// const props = defineProps({
-//     fetchKnowledgeBaseList: {
-//         type: Function,
-//         required: true,
-//     },
-// })
+// 定义组件的props
+const props = defineProps({
+    type: {
+        type: String,
+        default: 'private', // 默认值为'private'
+    }
+})
+
+// 根据type设置是创建知识库还是团队
+const dialogType = computed(() => {
+    if (props.type === 'private') {
+        return {
+            title: '新建知识库',
+            imgUrl: bookIcon, // 使用导入的图片
+            namePlaceholder: '知识库名称',
+            remarkPlaceholder: '知识库简介（选填）'
+        }
+    } else if (props.type === 'public') {
+        return {
+            title: '新建团队',
+            imgUrl: teamIcon,
+            namePlaceholder: '团队名称'
+        }
+    }
+})
 
 // 注入知识库数据
 const loadKnowledgeBases = inject('loadKnowledgeBases')

@@ -79,20 +79,20 @@ const router = createRouter({
 
 // 添加全局前置守卫
 router.beforeEach((to, from) => {
-  const token = localStorage.getItem('token');
+//   const token = localStorage.getItem('token');
   
-  // 新增：如果已登录且访问登录页，重定向到仪表盘
-  if (to.path === '/login' && token) {
-    return '/dashboard';
-  }
+//   // 新增：如果已登录且访问登录页，重定向到仪表盘
+//   if (to.path === '/login' && token) {
+//     return '/dashboard';
+//   }
   
-  // 原有认证检查
-  if (to.meta.requiresAuth && !token) {
-    return {
-      path: '/login',
-      query: { redirect: to.fullPath },
-    };
-  }
+//   // 原有认证检查
+//   if (to.meta.requiresAuth && !token) {
+//     return {
+//       path: '/login',
+//       query: { redirect: to.fullPath },
+//     };
+//   }
 })
 
 export default router

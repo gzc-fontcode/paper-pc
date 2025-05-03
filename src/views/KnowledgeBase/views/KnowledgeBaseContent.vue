@@ -186,6 +186,9 @@ onMounted(async () => {
             margin: 0;
             border-radius: 5px;
             cursor: pointer;
+            // 文本溢出自动换行
+            white-space: pre-wrap;
+            word-wrap: break-word;
             &:hover {
                 color: #3c7280;
                 background-color: rgba(140, 193, 220, 0.5);

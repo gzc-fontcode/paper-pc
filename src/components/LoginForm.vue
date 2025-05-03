@@ -42,9 +42,9 @@ const onSubmit = () => {
                 const res = await userLogin({ ...form }) // 调用登录接口
                 if (res.code === '200') {
                     // 存储token到localStorage
+                    localStorage.setItem('userId', res.data.userId)
                     localStorage.setItem('token', res.data.token)
                     ElMessage.success('登录成功！')
-                    console.log(router)
                     router.push('/dashboard') // 跳转到系统首页
                 }
             } catch (error) {

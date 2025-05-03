@@ -58,7 +58,7 @@
             </el-main>
         </el-container>
         <DeleteDialog ref="deleteDialog" />
-        <CreateDialog ref="createDialog" />
+        <CreateDialog ref="createDialog" type="private"/>
     </div>
 </template>
 

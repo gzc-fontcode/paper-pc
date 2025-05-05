@@ -58,7 +58,7 @@
             </el-main>
         </el-container>
         <DeleteDialog ref="deleteDialog" />
-        <CreateDialog ref="createDialog" type="private"/>
+        <CreateDialog ref="createDialog" type="knowledgeBase"/>
     </div>
 </template>
 
@@ -71,6 +71,7 @@ import { Plus } from '@element-plus/icons-vue'
 import { getKnowledgeBaseList } from '@/api/storage' // 新增接口引入
 
 const router = useRouter()
+
 const deleteDialog = ref(null)
 const createDialog = ref(null)
 // const knowledgeBases = ref([]) // 替换原有的静态数据
@@ -91,7 +92,11 @@ onMounted(() => {
 
 // 修改后的点击事件方法
 const navigateToKnowledgeBase = (id) => {
-    const route = router.resolve({ name: 'KnowledgeBase', params: { id, spaceType: 'private' } })
+    let spaceType = 'private'
+    if(router.currentRoute.value.params.teamId){
+        spaceType = 'public'
+    }
+    const route = router.resolve({ name: 'KnowledgeBase', params: { id, spaceType } })
     window.open(route.href, '_blank')
 }
 

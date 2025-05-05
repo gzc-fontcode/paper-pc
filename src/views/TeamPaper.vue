@@ -9,37 +9,41 @@
             <el-main>
                 <!-- 常用 -->
 
-                <!-- 我的知识库 -->
+                <!-- 我的团队 -->
                 <div class="paper-list">
-                    <el-card v-for="o in 8" :key="o">
+                    <el-card
+                        v-for="team in teamList"
+                        :key="team.id"
+                        @click="navigateToTeamSpace(team.id)"
+                    >
                         <template #header>
                             <div class="card-header">
                                 <div class="paper-name">
                                     <img src="@/assets/icon/team-fill.svg" alt="" />
-                                    <span>团队{{ o }}</span>
+                                    <span>{{ team.name }}</span>
                                 </div>
                                 <div class="paper-operation">
                                     <el-popover placement="bottom" trigger="click">
                                         <template #reference>
-                                            <el-button class="m-2"
+                                            <el-button class="m-2" @click.stop
                                                 ><el-icon><MoreFilled /></el-icon
                                             ></el-button>
                                         </template>
                                         <!-- 弹出框部分 -->
                                         <div class="card-popover">
                                             <el-button
+                                                v-if="userId === team.createBy"
                                                 type="danger"
                                                 text
-                                                @click="showDeleteDialog(o)"
-                                                >退出团队</el-button
-                                            >
-                                            <!-- 偶数代指在该团队为管理员 -->
-                                            <el-button
-                                                v-if="o % 2 === 0"
-                                                type="danger"
-                                                text
-                                                @click="showDeleteDialog(o)"
+                                                @click="showDeleteDialog(team)"
                                                 >解散团队</el-button
+                                            >
+                                            <el-button
+                                                v-else
+                                                type="danger"
+                                                text
+                                                @click="showDeleteDialog(team)"
+                                                >退出团队</el-button
                                             >
                                         </div>
                                     </el-popover>
@@ -60,18 +64,38 @@
             </el-main>
         </el-container>
         <DeleteDialog ref="deleteDialog" />
-        <CreateDialog ref="createDialog" type="public"/>
+        <CreateDialog ref="createDialog" type="team" />
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, inject, watch, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import DeleteDialog from '@/components/DeleteDialog.vue'
 import CreateDialog from '@/components/CreateDialog.vue'
 import { Plus } from '@element-plus/icons-vue'
+import { getKnowledgeBaseList } from '@/api/storage'
 
+const router = useRouter()
 const deleteDialog = ref(null)
 const createDialog = ref(null)
+
+const userId = Number(localStorage.getItem('userId'))
+
+const teamList = inject('teamList')
+
+// 加载知识库列表
+const loadKnowledgeBases = async () => {
+    if (teamList.value) {
+        for (const team of teamList.value) {
+            const res = await getKnowledgeBaseList({
+                teamId: team.id,
+                spaceType: 'public',
+            })
+            team.knowledgeBases = res.data
+        }
+    }
+}
 
 const items = ref([
     { id: 1, name: '知识库1', modifyTime: '2023-01-01 12:00:00' },
@@ -80,12 +104,27 @@ const items = ref([
     { id: 4, name: '知识库4', modifyTime: '2023-04-01 12:00:00' },
 ])
 
+// 路由跳转到团队详情页
+const navigateToTeamSpace = (teamId) => {
+    // 新标签页打开
+    const route = { name: 'TeamSpace', params: { teamId } }
+    window.open(router.resolve(route).href, '_blank')
+}
+
 const showDeleteDialog = (item) => {
     deleteDialog.value.showDialog(item)
 }
 const showCreateDialog = () => {
     createDialog.value.showDialog()
 }
+
+watch(
+    () => teamList.value.length,
+    () => {
+        loadKnowledgeBases()
+    },
+    { deep: true }
+)
 </script>
 
 <style lang="scss" scoped>

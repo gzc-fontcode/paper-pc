@@ -37,23 +37,11 @@
         </el-menu-item>
         <!-- 动态显示子菜单 -->
         <div v-if="expandStore.isExpand[1]" class="submenu">
-            <el-menu-item index="team-sub1">
-                <router-link to="/team/sub1">
+            <el-menu-item v-for="team in teamList" :key="team.id">
+                <a :href="`team/${team.id}/knowledge-base`" target="_blank">
                     <img src="@/assets/icon/team-fill.svg" alt="" />
-                    <span>团队A</span>
-                </router-link>
-            </el-menu-item>
-            <el-menu-item index="team-sub2">
-                <router-link to="/team/sub2">
-                    <img src="@/assets/icon/team-fill.svg" alt="" />
-                    <span>团队B</span>
-                </router-link>
-            </el-menu-item>
-            <el-menu-item index="team-sub3">
-                <router-link to="/team/sub3">
-                    <img src="@/assets/icon/team-fill.svg" alt="" />
-                    <span>团队C</span>
-                </router-link>
+                    <span>{{ team.name }}</span>
+                </a>
             </el-menu-item>
         </div>
         <!-- 菜单项 -->

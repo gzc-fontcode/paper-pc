@@ -21,7 +21,7 @@ import Sidebar from './components/Sidebar.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ref, provide, onMounted } from 'vue'
-import useKnowledgeBaseInfo from '@/hooks/useKnowledgeBaseInfo'
+import useKnowledgeBaseInfo from '@/hooks/useKnowledgeBaseInfoStore'
 import useDocumentTree from '@/hooks/useDocumentTree'
 
 const route = useRoute()

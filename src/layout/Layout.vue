@@ -16,8 +16,8 @@
 <script setup>
 import { onMounted, provide } from 'vue'
 import SideBar from './sidebar/SideBar.vue'
-import useKnowledgeStore from '@/hooks/useKnowledgeStore'
-import useTeamStore from '@/hooks/useTeamStore'
+import useKnowledgeStore from '@/hooks/useKnowledgeListStore'
+import useTeamStore from '@/hooks/useTeamListStore'
 
 const { knowledgeBases, loadKnowledgeBases } = useKnowledgeStore()
 const { teamList, fetchTeamList } = useTeamStore(localStorage.getItem('userId'))

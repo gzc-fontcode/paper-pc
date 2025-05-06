@@ -4,7 +4,7 @@ import { getTeamList } from '@/api/team'
 export default function useTeamStore(id) {
     const teamList = ref([]) // 团队列表
 
-    // 加载知识库列表
+    // 加载团队列表
     const fetchTeamList = async (userId = id) => {
         try {
             const res = await getTeamList({ userId })
@@ -12,7 +12,7 @@ export default function useTeamStore(id) {
                 teamList.value = res.data || [] 
             }
         } catch (err) {
-            console.error('获取知识库列表失败', err)
+            console.error('获取团队列表失败', err)
         }
     }
 

@@ -45,11 +45,11 @@
             </el-menu-item>
         </div>
         <!-- 菜单项 -->
-        <el-menu-item index="favorites">
+        <!-- <el-menu-item index="favorites">
             <template #title>
                 <span>收藏</span>
             </template>
-        </el-menu-item>
+        </el-menu-item> -->
     </el-menu>
 </template>
 

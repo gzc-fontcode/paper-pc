@@ -84,12 +84,6 @@ const items = ref([
     { id: 4, name: '文档4', modifyTime: '2023-04-01 12:00:00' },
 ])
 
-// 新增数据获取逻辑
-onMounted(() => {
-    // 获取知识库列表
-    // fetchKnowledgeBaseList()
-})
-
 // 修改后的点击事件方法
 const navigateToKnowledgeBase = (id) => {
     let spaceType = 'private'

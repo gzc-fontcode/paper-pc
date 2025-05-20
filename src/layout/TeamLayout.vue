@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, provide } from 'vue'
 import { useRoute } from 'vue-router'
-import TeamSideBar from './sidebar/TeamSideBar.vue';
+import TeamSideBar from './sidebar/TeamSideBar.vue'
 import useKnowledgeStore from '@/hooks/useKnowledgeListStore'
 import useTeamInfoStore from '@/hooks/useTeamInfoStore'
 
@@ -23,13 +23,21 @@ const teamId = route.params.teamId
 
 const { knowledgeBases, loadKnowledgeBases } = useKnowledgeStore({
     teamId,
-    spaceType: 'public'
+    spaceType: 'public',
 })
 
-const { userInfo, teamUserList, fetchTeamUserList, inviteUserToTeam, assignAdminToUser, deleteUserFromTeam } = useTeamInfoStore(teamId)
-console.log(teamUserList, 'teamUserList');
+const {
+    userInfo,
+    teamUserList,
+    adminList,
+    fetchTeamUserList,
+    inviteUserToTeam,
+    assignAdminToUser,
+    deleteUserFromTeam,
+} = useTeamInfoStore(teamId)
+console.log(teamUserList, 'teamUserList')
 onMounted(async () => {
-    await loadKnowledgeBases() // 加载知识库列表 
+    await loadKnowledgeBases() // 加载知识库列表
 })
 
 // 提供知识库数据给子组件
@@ -39,11 +47,11 @@ provide('loadKnowledgeBases', loadKnowledgeBases)
 // 提供用户列表数据给子组件
 provide('userInfo', userInfo)
 provide('teamUserList', teamUserList)
+provide('adminList', adminList)
 provide('fetchTeamUserList', fetchTeamUserList)
 provide('inviteUserToTeam', inviteUserToTeam)
 provide('assignAdminToUser', assignAdminToUser)
 provide('deleteUserFromTeam', deleteUserFromTeam)
-
 </script>
 
 <style lang="scss" scoped>

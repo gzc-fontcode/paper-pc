@@ -6,6 +6,10 @@ export default function useTeamInfoStore(teamId) {
     const teamUserList = ref([]) // 团队用户列表
     const userId = JSON.parse(localStorage.getItem('userId')) // 获取当前登录用户信息
     const userInfo = ref({}) // 当前登录用户信息
+    // 拥有管理员权限的用户列表
+    const adminList = computed(() => {
+        return teamUserList.value.filter(user => user.role === 'manager') // 过滤出管理员用户 
+    })
 
     watch(teamUserList, (newVal, oldVal) => {
         userInfo.value = newVal.find(user => user.id === userId) || {} // 根据当前登录用户ID查找用户信息
@@ -58,6 +62,7 @@ export default function useTeamInfoStore(teamId) {
     return {
         userInfo,
         teamUserList,
+        adminList,
         fetchTeamUserList,
         inviteUserToTeam,
         assignAdminToUser,

@@ -25,4 +25,10 @@ body {
 .el-icon {
   position: static;
 }
+
+.dialog-footer {
+  button + button {
+    margin-left: 10px !important;
+  }
+}
 </style>

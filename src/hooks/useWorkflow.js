@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
     createTemplate,
     loadProcess,
@@ -7,6 +7,12 @@ import {
     traverseNode,
     getTemplateList,
     deleteTemplate,
+    initiateProcess as initiateProcessApi,
+    deleteProcess as deleteProcessApi,
+    traverseProcess,
+    traverseProcessNode,
+    agreeProcess as agreeProcessApi,
+    rejectProcess as rejectProcessApi,
 } from '@/api/process' // 假设 api 存在
 import { ElMessage } from 'element-plus' // 假设 Element Plus 存在
 
@@ -26,6 +32,16 @@ export function useWorkflow(teamId) {
 
     // 获取流程模板列表
     const templateList = ref([])
+
+    // 流程列表
+    const processList = ref([])
+
+    // 获取流程列表
+    const getProcessListData = async () => {
+        const res = await traverseProcess()
+        console.log(res, 'res.data')
+        processList.value = res.data || [] 
+    }
     // 获取流程模板列表
     const getTemplateListData = async () => {
         const res = await getTemplateList({ teamId })
@@ -36,11 +52,11 @@ export function useWorkflow(teamId) {
         try {
             const res = await deleteTemplate({ processId }) // 调用删除流程模板接口
             ElMessage.success('删除流程模板成功')
-            console.log('删除流程模板成功', res.data) 
+            console.log('删除流程模板成功', res.data)
         } catch (error) {
             ElMessage.error('删除流程模板失败')
             console.error('删除流程模板失败', error)
-            throw error 
+            throw error
         }
     }
 
@@ -69,6 +85,30 @@ export function useWorkflow(teamId) {
             ElMessage.error('新增节点失败')
             console.error('新增节点失败', error)
             throw error
+        }
+    }
+
+    // 同意流程
+    const agreeProcess = async (id) => {
+        try {
+            const res = await agreeProcessApi({ id }) // 调用同意流程接口
+            ElMessage.success('同意流程成功')
+            console.log('同意流程成功', res.data) 
+        } catch (error) {
+            ElMessage.error('同意流程失败')
+            console.error('同意流程失败', error)
+            throw error 
+        }
+    }
+
+    // 驳回流程
+    const rejectProcess = async (id) => {
+        try {
+            const res = await rejectProcessApi({ id }) // 调用驳回流程接口
+            ElMessage.success('驳回流程成功')
+            console.log('驳回流程成功', res.data) 
+        } catch (error) {
+            ElMessage.error('驳回流程失败') 
         }
     }
 
@@ -111,11 +151,54 @@ export function useWorkflow(teamId) {
         }
     }
 
+    // 发起流程
+    const initiateProcess = async (data) => {
+        try {
+            const res = await initiateProcessApi({ processId: data.templateId, title: data.title })
+            console.log('流程发起成功', res.data)
+            return res
+        } catch (error) {
+            console.error('流程发起失败', error)
+            throw error
+        }
+    }
+
+    // 删除流程
+    const deleteProcess = async (process) => {
+        try {
+            const res = await deleteProcessApi({ ...process, approver: process.approver.id }) // 调用删除流程接口
+            ElMessage.success('删除流程成功')
+            console.log('删除流程成功', res.data) 
+        } catch (error) {
+            ElMessage.error('删除流程失败')
+            console.error('删除流程失败', error)
+            throw error 
+        }
+    }
+
+    // 获取流程中的节点
+    const getProcessNodeList = async (id) => {
+        try {
+            const res = await traverseProcessNode({ id }) // 调用获取流程节点列表接口
+            console.log('获取流程节点列表成功', res)
+            nodeList.value = res.data // 假设接口返回的是一个对象，包含 nodes 属性
+            // return res.data // 假设接口返回的是一个对象，包含 nodes 属性
+        } catch (error) {
+            console.error('获取流程节点列表失败', error)
+            throw error 
+        }
+    }
+
+    onMounted(() => {
+        getProcessListData() // 加载流程列表
+    })
+
     return {
         templateList,
         nodeList,
         nodeForm,
         createFlowForm,
+        processList,
         getTemplateListData,
         createFlow,
         createNode,
@@ -123,5 +206,11 @@ export function useWorkflow(teamId) {
         loadNodeList,
         loadFlow,
         deleteFlow,
+        initiateProcess,
+        getProcessListData,
+        deleteProcess,
+        getProcessNodeList,
+        agreeProcess,
+        rejectProcess,
     }
 }

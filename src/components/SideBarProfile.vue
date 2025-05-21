@@ -9,7 +9,7 @@
                     <template #header>
                         <div class="card-header">
                             <img class="sidebar-logo" src="@/assets/pic/logo-app.png" alt="" />
-                            <span class="sidebar-title">test</span>
+                            <span class="sidebar-title">{{ userId }}</span>
                         </div>
                     </template>
                     <!--  -->
@@ -52,6 +52,8 @@ import { ElDrawer, ElMessage } from 'element-plus'
 import PersonalSpace from './PersonalSpace.vue' // 假设 PersonalSpace.vue 在 views 目录下
 import { logout as userLogout } from '@/api/user' // 新增接口引入
 
+const userId = localStorage.getItem('userId')
+
 const router = useRouter()
 const personalSpaceDrawerVisible = ref(false)
 
@@ -63,18 +65,18 @@ const logout = async () => {
     try {
         // 调用退出登录接口
         // await userLogout();
-        
+
         // 清除本地存储中的用户信息
-        localStorage.removeItem('token');
+        localStorage.removeItem('token')
         // 如果需要可以同时清除其他用户信息
         // localStorage.removeItem('user');
-        
-        ElMessage.success('退出成功');
+
+        ElMessage.success('退出成功')
         // 路由跳转至登录页
-        router.push('/login');
+        router.push('/login')
     } catch (error) {
-        ElMessage.error('退出登录失败');
-        console.error('退出登录失败', error);
+        ElMessage.error('退出登录失败')
+        console.error('退出登录失败', error)
     }
 }
 const handleDrawerClose = () => {

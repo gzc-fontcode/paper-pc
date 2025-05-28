@@ -7,6 +7,9 @@
             </div>
             <div class="doc-head-right">
                 <div class="doc-head-actions">
+                    <div v-if="spaceType==='public'">
+                        <el-button type="primary" class="edit" @click="goCooperativeWork">协同编辑</el-button>
+                    </div>
                     <div v-if="!isEditable">
                         <el-button type="primary" class="edit" @click="toggleEditable">编辑</el-button>
                     </div>
@@ -21,6 +24,19 @@
 
 <script setup>
 import { defineProps } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+// 获取路由参数
+const route = useRoute()
+const { documentId, id, spaceType } = route.params
+
+// 路由跳转
+const router = useRouter()
+const goCooperativeWork = () => {
+    router.push({
+        name: 'DocumentCooperativeWork',
+        params: { documentId },
+    })
+}
 
 const props = defineProps({
     document: {

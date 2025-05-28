@@ -9,6 +9,7 @@ import NotFound from '@/views/NotFound.vue'
 import KnowledgeBase from '@/views/KnowledgeBase/KnowledgeBase.vue'
 import KnowledgeBaseContent from '@/views/KnowledgeBase/views/KnowledgeBaseContent.vue'
 import DocumentPage from '@/views/KnowledgeBase/views/DocumentPage.vue'
+import DocumentCooperativeWork from '@/views/KnowledgeBase/views/DocumentCooperativeWork.vue'
 // 导入团队页面组件
 import TeamKnowledgeBase from '@/views/Team/KnowledgeBase.vue'
 import TeamMemberManagement from '@/views/Team/MemberManagement.vue'
@@ -69,6 +70,11 @@ const routes = [
             // 可以在这里添加更多子路由
         ],
     },
+    {
+        path: '/cooperativework/:documentId',
+        name: 'DocumentCooperativeWork',
+        component: DocumentCooperativeWork,
+    },
     // 团队路由
     {
         path: '/team/:teamId',
@@ -110,18 +116,18 @@ const router = createRouter({
 
 // 添加全局前置守卫
 router.beforeEach((to, from) => {
-      const token = localStorage.getItem('token');
-      // 新增：如果已登录且访问登录页，重定向到仪表盘
-      if (to.path === '/login' && token) {
-        return '/dashboard';
-      }
-      // 原有认证检查
-      if (to.meta.requiresAuth && !token) {
+    const token = localStorage.getItem('token')
+    // 新增：如果已登录且访问登录页，重定向到仪表盘
+    if (to.path === '/login' && token) {
+        return '/dashboard'
+    }
+    // 原有认证检查
+    if (to.meta.requiresAuth && !token) {
         return {
-          path: '/login',
-          query: { redirect: to.fullPath },
-        };
-      }
+            path: '/login',
+            query: { redirect: to.fullPath },
+        }
+    }
 })
 
 export default router

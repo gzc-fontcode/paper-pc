@@ -42,6 +42,8 @@ export function useRichTextEditor() {
     lowlight.register('ts', ts)
 
     const route = useRoute()
+    console.log(route.params, 'route')
+    const isCooperativeWork = route.name === 'DocumentCooperativeWork'
 
     // 编辑器的一些信息
     const editorInfo = reactive({
@@ -116,7 +118,7 @@ export function useRichTextEditor() {
     const getDocumentContent = async (id) => {
         // 获取文档信息
         const fileInfoRes = await getFileInfo({ id })
-            Object.assign(document.value, fileInfoRes.data[0])
+        Object.assign(document.value, fileInfoRes.data[0])
         const res = await downloadFile(id)
         if (typeof res === 'string') {
             // 更新编辑器内容
@@ -164,19 +166,20 @@ export function useRichTextEditor() {
             document.value.label = `文档 ${newId}`
         }
     )
+    if (!isCooperativeWork) {
+        // 监听document.id的变化，获取文档内容
+        watch(
+            () => document.value.id,
+            (newId) => {
+                getDocumentContent(newId)
+            }
+        )
 
-    // 监听document.id的变化，获取文档内容
-    watch(
-        () => document.value.id,
-        (newId) => {
-            getDocumentContent(newId)
-        }
-    )
-
-    // 在组件挂载时获取文档内容
-    onMounted(() => {
-        getDocumentContent(document.value.id)
-    })
+        // 在组件挂载时获取文档内容
+        onMounted(() => {
+            getDocumentContent(document.value.id)
+        })
+    }
 
     // 在组件卸载时销毁编辑器实例
     onUnmounted(() => {

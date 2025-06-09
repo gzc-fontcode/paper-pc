@@ -169,10 +169,11 @@
                 插入链接<br />
                 Ctrl K
             </template>
-            <div class="toolbar-btn" @click="insertLink(editor)">
+            <div class="toolbar-btn" @click="showLinkDialog = true">
                 <i class="iconfont icon-link"></i>
             </div>
         </el-tooltip>
+
         <el-tooltip :show-arrow="false" effect="customized" placement="bottom">
             <template #content>
                 插入代码块<br />
@@ -196,6 +197,28 @@
             </div>
         </el-tooltip>
     </div>
+    <!-- 链接输入对话框，添加 append-to-body 属性 -->
+    <el-dialog 
+        v-model="showLinkDialog" 
+        title="插入链接" 
+        width="30%"
+        append-to-body
+    >
+        <el-form :model="linkForm" label-width="80px">
+            <el-form-item label="链接地址">
+                <el-input v-model="linkForm.url" placeholder="请输入链接地址"></el-input>
+            </el-form-item>
+            <el-form-item label="链接文本">
+                <el-input v-model="linkForm.text" placeholder="请输入链接文本"></el-input>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="showLinkDialog = false">取消</el-button>
+                <el-button type="primary" @click="handleInsertLink">确定</el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
@@ -219,7 +242,7 @@ import {
     insertTable, // 引入插入表格的函数
     insertCodeBlock, // 引入插入代码块的函数
     insertImage, // 引入插入图片的函数
-    handleAttachmentUpload // 引入处理附件上传的函数
+    handleAttachmentUpload, // 引入处理附件上传的函数
 } from '@/utils/editorUtils'
 
 // 注入编辑器实例
@@ -234,6 +257,24 @@ const currentNodeType = ref('')
 const fileInput = ref(null)
 // 处理附件选择
 const attachmentInput = ref(null)
+
+// 控制链接对话框显示状态
+const showLinkDialog = ref(false)
+// 存储链接信息
+const linkForm = ref({
+    url: '',
+    text: '',
+})
+
+// 处理插入链接操作
+const handleInsertLink = () => {
+    if (linkForm.value.url) {
+        insertLink(editor, linkForm.value.url, linkForm.value.text || linkForm.value.url)
+        showLinkDialog.value = false
+        linkForm.value.url = ''
+        linkForm.value.text = ''
+    }
+}
 </script>
 
 <style lang="scss" scoped>

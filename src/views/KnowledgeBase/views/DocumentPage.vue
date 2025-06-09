@@ -29,6 +29,7 @@ const { editorInfo, toggleEditable, document, editor } = useRichTextEditor()
 provide('editor', editor)
 provide('editorInfo', editorInfo)
 provide('document', document)
+
 </script>
 
 <style lang="scss" scoped>

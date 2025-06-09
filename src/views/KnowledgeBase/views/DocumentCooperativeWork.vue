@@ -134,8 +134,20 @@ setTimeout(() => {
         })
     )
 }, 1000)
-// 监听document.value的变化，发送更新消息
-editor.on('transaction', ({ transaction }) => {
+
+// 自定义防抖函数
+const debounce = (fn: Function, delay: number) => {
+    let timer: NodeJS.Timeout | null = null;
+    return (...args: any[]) => {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn(...args);
+        }, delay);
+    };
+};
+
+// 监听document.value的变化，发送更新消息，使用防抖函数
+const debouncedTransactionHandler = debounce(({ transaction }) => {
     if (transaction.docChanged) {
         const content = editor.getHTML()
         socket.send(
@@ -146,7 +158,9 @@ editor.on('transaction', ({ transaction }) => {
             })
         )
     }
-})
+}, 300); // 可根据实际情况调整防抖延迟时间
+// 监听document.value的变化，发送更新消息
+editor.on('transaction', debouncedTransactionHandler)
 
 provide('editor', editor)
 provide('editorInfo', editorInfo)

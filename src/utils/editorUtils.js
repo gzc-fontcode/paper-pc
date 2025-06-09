@@ -56,14 +56,14 @@ export const toggleBlockquote = (editor) => {
 }
 
 // 插入链接
-export const insertLink = (editor, href = '', target = '_blank') => {
+export const insertLink = (editor, href = '',text='链接', target = '_blank') => {
     if (editor) {
         // 判断当前是否有选中文本
         const { from, to } = editor.state.selection
         const isTextSelected = from !== to
         if (!isTextSelected) {
             // 若未选中文本，插入默认文本为“链接”的链接，并将光标定位到“链接”后面
-            editor.chain().focus().setLink({ href, target }).insertContent('链接').run()
+            editor.chain().focus().setLink({ href, target }).insertContent(text).run()
         } else editor.chain().focus().setLink({ href, target }).run()
     }
 }
